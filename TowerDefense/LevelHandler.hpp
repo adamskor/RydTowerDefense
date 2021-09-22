@@ -2,6 +2,7 @@
 #define LEVELHANDLER_HPP
 #include <SFML/Graphics.hpp>
 #include "DynamicObjects/Enemy.hpp"
+#include "DynamicObjects/Tower.hpp"
 #include <iostream>
 
 
@@ -24,6 +25,7 @@ private:
   sf::Vector2i windowSize;
   std::vector<sf::Vector2f> path;
   std::vector<Enemy*> enemies = {};
+  std::vector<Tower*> towers = {};
   int healthPoints = 100;
   int level = 1;
   int nEnemies = 0;
@@ -33,6 +35,7 @@ private:
   float releaseSpeed = 1.0;
   bool activeLevel = false;
   sf::Clock clock;
+  sf::Clock speedClock;
 protected:
   std::map<std::string, sf::Texture*> textures;
 

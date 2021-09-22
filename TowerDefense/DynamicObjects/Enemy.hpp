@@ -10,7 +10,7 @@ public:
   Enemy();
   void initPath();
   virtual void onRender(sf::RenderWindow* window) = 0;
-  virtual void onUpdate() = 0;
+  virtual void onUpdate(const int ms) = 0;
   virtual void release() = 0;
   virtual void resetWentThrough() = 0;
   virtual void kill() = 0;
@@ -26,7 +26,7 @@ class Mohammed : public Enemy {
 public:
   Mohammed(std::map<std::string, sf::Texture*> initTextures,
            const std::vector<sf::Vector2f>& initPath);
-  void onUpdate();
+  void onUpdate(const int ms);
   void onRender(sf::RenderWindow* window);
 public:
   void release(){released = true;};
