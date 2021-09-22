@@ -4,10 +4,6 @@ Enemy::Enemy(){
 
 }
 
-void Enemy::onRender(sf::RenderWindow* window){
-  this->onRender();
-}
-
 void Enemy::initPath(){
   sf::Vector2i c1{800, 900};
   sf::Vector2i c2{800, 600};
@@ -37,8 +33,10 @@ Mohammed::Mohammed(){
 }
 
 void Mohammed::onUpdate(){
-  rect->setPosition(path[step]);
-  step++;
+  if (step != (int)path.size()){
+    rect->setPosition(path[step]);
+    step++;
+  }
 }
 
 void Mohammed::onRender(sf::RenderWindow* window){

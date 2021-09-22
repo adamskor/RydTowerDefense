@@ -5,14 +5,16 @@ RunState::RunState(sf::RenderWindow* window, sf::Vector2i windowSize,
 window{window}, windowSize{windowSize}, aspectRatio{aspectRatio}{
   loadTextures();
   playingField = new PlayingField(textures, windowSize, aspectRatio);
-  enemies = new Enemy();
-}
+  levelhandler = new Level();
+;}
 
 void RunState::onRender(){
   playingField->onRender(window);
-  for (size_t i = 0; i < enemies.size(); i++){
-    enemies[i]->onRender(window);
-  }
+
+}
+
+void RunState::onUpdate(){
+  levelhandler->onUpdate();
 }
 
 void RunState::printInfo(){

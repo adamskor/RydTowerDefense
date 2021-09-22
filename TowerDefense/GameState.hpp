@@ -5,12 +5,13 @@
 #include <map>
 #include <string>
 #include "StaticObjects/PlayingField.hpp"
-#include "DynamicObjects/Enemy.hpp"
+#include "LevelHandler.hpp"
+
 
 class GameState{
 public:
   GameState();
-  ~GameState() = default;
+  ~GameState();;
 public:
   virtual void printInfo(){};
   virtual void onRender() = 0;
@@ -22,7 +23,8 @@ public:
   void loadTextures();
 public:
   PlayingField* playingField = nullptr;
-  std::vector<Enemy*> enemies = {nullptr};
+  LevelHandler* levelhandler = nullptr;
+
 protected:
   int nextState = 1;
   std::map<std::string, sf::Texture*> textures;
