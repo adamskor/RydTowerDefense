@@ -13,8 +13,10 @@ public:
 public:
   void printInfo() override;
   void onRender() override;
-  void onUpdate() override{};
+  void onUpdate() override;
+  void shutDown() override;
   void onEvent(sf::Event& event) override{};
+  void nextLevel() override;
 private:
   sf::Vector2i windowSize;
   sf::Vector2i aspectRatio;

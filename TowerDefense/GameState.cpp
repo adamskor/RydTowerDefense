@@ -13,6 +13,8 @@ GameState::~GameState(){
   //}
 }
 
+
+
 void GameState::setNextState(int next){
   nextState = next;
 }
@@ -26,4 +28,7 @@ void GameState::loadTextures(){
   sf::Texture* texture{new sf::Texture()};
   texture->loadFromFile("TowerDefense/Assets/Textures/PlayingField.png");
   textures["Background"] = texture;
+  sf::Texture* texture1{new sf::Texture()};
+  texture1->loadFromFile("TowerDefense/Assets/Textures/Mohammed.jpg");
+  textures["Mohammed"] = texture1;
 }

@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <memory>
 struct Squares;
 
 class PlayingField{
@@ -12,7 +13,9 @@ public:
   PlayingField(std::map<std::string, sf::Texture*> textures,
                sf::Vector2i initWindowSize,
                sf::Vector2i aspectRatio);
+  ~PlayingField();
 public:
+  void shutDown();
   void onRender(sf::RenderWindow* window);
 public:
   void initSquares();
@@ -21,9 +24,9 @@ public:
 private:
   std::vector<sf::Vector2i> path;
   std::map<std::string, sf::Texture*> textures;
-  sf::Sprite* field = nullptr;
+  std::unique_ptr<sf::Sprite> field;
   bool buyMode = false;
-  std::vector<Squares*> squares;
+  std::vector<std::unique_ptr<Squares>> squares;
   sf::Vector2i windowSize;
   sf::Vector2i aspectRatio;
 
@@ -32,7 +35,7 @@ private:
 class Squares{
 public:
   Squares(sf::Vector2f size, sf::Vector2f position);
-
+  void shutDown();
   void onRender(sf::RenderWindow* window);
 
   void switchOccupied();

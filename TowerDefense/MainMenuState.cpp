@@ -8,6 +8,13 @@ window{window}, windowSize{windowSize}, aspectRatio{aspectRatio}{
   rect->setFillColor(sf::Color::Blue);
 }
 
+void MainMenuState::shutDown(){
+  if(rect){
+    delete rect;
+  }
+
+}
+
 void MainMenuState::onRender(){
   window->draw(*rect);
 }

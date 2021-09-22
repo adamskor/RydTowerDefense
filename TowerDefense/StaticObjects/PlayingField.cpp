@@ -6,11 +6,24 @@ PlayingField::PlayingField(std::map<std::string, sf::Texture*> textures,
                            sf::Vector2i aspectRatio) :
 textures{textures}, aspectRatio{aspectRatio}{
   windowSize = initWindowSize;
-  field = new sf::Sprite(*textures["Background"]);
+  field = std::make_unique<sf::Sprite>(*textures["Background"]);
   field->setPosition(0,0);
   field->setScale(sf::Vector2f((float)windowSize.x/1920,
                                (float)windowSize.y/1080));
   initSquares();
+}
+
+PlayingField::~PlayingField(){
+
+}
+
+void PlayingField::shutDown(){
+  for (size_t i = 0; i < squares.size(); i++){
+    if (squares[i]){
+      squares[i]->shutDown();
+    }
+
+  }
 }
 
 void PlayingField::onRender(sf::RenderWindow* window){
@@ -38,7 +51,7 @@ void PlayingField::initSquares(){
   float sizeY = windowSize.y/numberY;
   for (int x = 0; x < numberX; x++){
     for (int y = 0; y <numberY; y++){
-      squares.push_back(new Squares(sf::Vector2f(sizeX, sizeY),
+      squares.push_back(std::make_unique<Squares>(sf::Vector2f(sizeX, sizeY),
                                     sf::Vector2f(x*sizeX, y*sizeY)));
     }
   }
@@ -50,6 +63,10 @@ Squares::Squares(sf::Vector2f size, sf::Vector2f position){
   rect->setFillColor(sf::Color::Transparent);
   rect->setOutlineColor(sf::Color::Black);
   rect->setOutlineThickness(1);
+}
+
+void Squares::shutDown(){
+  delete rect;
 }
 
 void Squares::onRender(sf::RenderWindow* window){

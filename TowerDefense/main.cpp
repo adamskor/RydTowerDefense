@@ -2,7 +2,7 @@
 #include "TowerDefense.hpp"
 
 int main(){
-  TowerDefense TD = TowerDefense(sf::Vector2i(1600, 900), sf::Vector2i(19, 9), 60);
+  TowerDefense TD = TowerDefense(sf::Vector2i(800, 400), sf::Vector2i(2, 1), 180);
   TD.start();
   return 0;
 }
