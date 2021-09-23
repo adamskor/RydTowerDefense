@@ -1,10 +1,11 @@
 #include "LevelHandler.hpp"
 
-LevelHandler::LevelHandler(std::map<std::string, sf::Texture*> textures,
-                           const sf::Vector2i& windowSize)
-: windowSize{windowSize}, textures{textures}{
+LevelHandler::LevelHandler(const std::map<std::string, sf::Texture*>& textures,
+                           const sf::Vector2i& windowSize, PlayingField*& playingfield)
+: windowSize{windowSize}, textures{textures}, playingfield{playingfield}{
   clock = sf::Clock();
   speedClock = sf::Clock();
+  buymenu = new BuyMenu(textures, windowSize, playingfield);
   initPath();
 }
 
@@ -23,6 +24,9 @@ void LevelHandler::onRender(sf::RenderWindow* window){
         enemies[i]->onRender(window);
     }
   }
+  if (buymenu){
+    buymenu->onRender(window);
+  }
 
 }
 
@@ -30,8 +34,8 @@ void LevelHandler::onUpdate(){
   if (speedClock.getElapsedTime().asMilliseconds() > 30){
     speedClock.restart();
   }
-  std::cout << speedClock.getElapsedTime().asMilliseconds() << std::endl;
   if (activeLevel){
+    buymenu->updateEnemies(enemies);
     for (size_t i = 0; i < enemies.size(); i++){
       if (enemies[i] != nullptr)
         enemies[i]->onUpdate((int)speedClock.getElapsedTime().asMilliseconds());
@@ -49,7 +53,7 @@ void LevelHandler::onUpdate(){
       } else {
         deadCount = 0;
       }
-      if (clock.getElapsedTime().asSeconds() > 1*releaseSpeed){
+      if (clock.getElapsedTime().asSeconds() > 1.5*releaseSpeed){
         releaseEnemy();
         clock.restart();
       }
@@ -86,417 +90,6 @@ void LevelHandler::endLevel(){
   enemies = {};
   level++;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void LevelHandler::initPath(){
   std::vector<sf::Vector2f> pathVec = {};
@@ -546,91 +139,9 @@ void LevelHandler::initPath(){
   pathVec.push_back(sf::Vector2f(windowSize.x*0.47375, windowSize.y*0.177778));
 
   for (size_t i = 0; i < pathVec.size() - 1; i++){
-    AtoB(pathVec[i], pathVec[i + 1]);
+    mathUtil.AtoB(path, pathVec[i], pathVec[i + 1]);
   }
-}
-
-void LevelHandler::AtoB(const sf::Vector2f& from, const sf::Vector2f& to){
-  int xDistance = abs(from.x - to.x);
-  int yDistance = abs(from.y - to.y);
-  if (from.x == to.x && from.y == to.y){
-    return;
-  }
-  int longest = std::max(xDistance, yDistance);
-  int shortest = std::min(xDistance, yDistance);
-  float slope = (float)shortest/longest;
-  if (longest == xDistance){
-    int y = 0;
-    if (from.x - to.x >= 0 && from.y - to.y > 0){
-      for (int lng = from.x; lng > from.x - xDistance ; lng--){
-        path.push_back(sf::Vector2f((float)lng, (float)y*slope + from.y));
-        y--;
-      }
-    }
-    if (from.x - to.x >= 0 && from.y - to.y < 0){
-      for (int lng = from.x; lng > from.x - xDistance ; lng--){
-        path.push_back(sf::Vector2f((float)lng, (float)y*slope + from.y));
-        y++;
-      }
-    }
-    if (from.x - to.x >= 0 && from.y - to.y == 0){
-      for (int lng = from.x; lng > from.x - xDistance ; lng--){
-        path.push_back(sf::Vector2f((float)lng, (float)from.y));
-      }
-    }
-    if (from.x - to.x < 0 && from.y - to.y > 0){
-      for (int lng = from.x; lng < from.x + xDistance ; lng++){
-        path.push_back(sf::Vector2f((float)lng, (float)y*slope + from.y));
-        y--;
-      }
-    }
-    if (from.x - to.x < 0 && from.y - to.y < 0){
-      for (int lng = from.x; lng < from.x + xDistance ; lng++){
-        path.push_back(sf::Vector2f((float)lng, (float)y*slope + from.y));
-        y++;
-      }
-    }
-    if (from.x - to.x < 0 && from.y - to.y == 0){
-      for (int lng = from.x; lng < from.x + xDistance ; lng++){
-        path.push_back(sf::Vector2f((float)lng, (float)from.y));
-      }
-    }
-  }
-  if (longest == yDistance){
-    int x = 0;
-    if (from.y - to.y >= 0 && from.x - to.x > 0){
-      for (int lng = from.y; lng > from.y - yDistance ; lng--){
-        path.push_back(sf::Vector2f((float)x*slope + from.x, (float)lng));
-        x--;
-      }
-    }
-    if (from.y - to.y >= 0 && from.x - to.x < 0){
-      for (int lng = from.y; lng > from.y - yDistance ; lng--){
-        path.push_back(sf::Vector2f((float)x*slope + from.x, (float)lng));
-        x++;
-      }
-    }
-    if (from.y - to.y >= 0 && from.x - to.x == 0){
-      for (int lng = from.y; lng > from.y - yDistance ; lng--){
-        path.push_back(sf::Vector2f((float)from.x, (float)lng));
-      }
-    }
-    if (from.y - to.y < 0 && from.x - to.x > 0){
-      for (int lng = from.y; lng < from.y + yDistance ; lng++){
-        path.push_back(sf::Vector2f((float)x*slope + from.x, (float)lng));
-        x--;
-      }
-    }
-    if (from.y - to.y < 0 && from.x - to.x < 0){
-      for (int lng = from.y; lng < from.y + yDistance ; lng++){
-        path.push_back(sf::Vector2f((float)x*slope + from.x, (float)lng));
-        x++;
-      }
-    }
-    if (from.y - to.y < 0 && from.x - to.x == 0){
-      for (int lng = from.y; lng < from.y + yDistance ; lng++){
-        path.push_back(sf::Vector2f((float)from.x, (float)lng));
-      }
-    }
-  }
+  //for (size_t i = 0; i < path.size(); i++){
+  //  path[i] = sf::Vector2f(path[i].x - 60, path[i].y - 60);
+  //}
 }

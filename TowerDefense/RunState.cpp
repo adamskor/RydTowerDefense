@@ -5,9 +5,9 @@ RunState::RunState(sf::RenderWindow* window, sf::Vector2i windowSize,
 window{window}, windowSize{windowSize}, aspectRatio{aspectRatio}{
   loadTextures();
   playingField = new PlayingField(textures, windowSize, aspectRatio);
-  levelhandler = new LevelHandler(textures, windowSize);
+  levelhandler = new LevelHandler(textures, windowSize, playingField);
   levelhandler->nextLevel();
-;}
+}
 
 void RunState::shutDown(){
   if(playingField){

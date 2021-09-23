@@ -24,11 +24,12 @@ protected:
 
 class Mohammed : public Enemy {
 public:
-  Mohammed(std::map<std::string, sf::Texture*> initTextures,
+  Mohammed(const std::map<std::string, sf::Texture*>& initTextures,
            const std::vector<sf::Vector2f>& initPath);
   void onUpdate(const int ms);
   void onRender(sf::RenderWindow* window);
 public:
+  void setPosition(sf::Vector2f& position);
   void release(){released = true;};
   void kill(){dead = true;};
   void resetWentThrough(){wentThrough = false;};

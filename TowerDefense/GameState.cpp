@@ -5,8 +5,8 @@ GameState::GameState()
 }
 
 GameState::~GameState(){
-  delete playingField;
-  delete levelhandler;
+  //delete playingField;
+  //delete levelhandler;
   //TODO: Empty texture map
   //for (size_t i = 0; i < map.size(); i++){
   //  delete textures.at(i).second;
@@ -29,6 +29,9 @@ void GameState::loadTextures(){
   texture->loadFromFile("TowerDefense/Assets/Textures/PlayingField.png");
   textures["Background"] = texture;
   sf::Texture* texture1{new sf::Texture()};
-  texture1->loadFromFile("TowerDefense/Assets/Textures/Mohammed.jpg");
+  texture1->loadFromFile("TowerDefense/Assets/Textures/Mohammed.png");
   textures["Mohammed"] = texture1;
+  sf::Texture* texture2{new sf::Texture()};
+  texture2->loadFromFile("TowerDefense/Assets/Textures/Aina.jpg");
+  textures["Aina"] = texture2;
 }

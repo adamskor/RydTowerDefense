@@ -2,22 +2,22 @@
 
 Enemy::Enemy(){}
 
-Mohammed::Mohammed(std::map<std::string, sf::Texture*> initTextures,
+Mohammed::Mohammed(const std::map<std::string, sf::Texture*>& initTextures,
                    const std::vector<sf::Vector2f>& initPath){
   path = initPath;
   textures = initTextures;
   mohammed = std::make_unique<sf::Sprite>(*textures["Mohammed"]);
-  mohammed->setPosition(-50,-50);
+  mohammed->setPosition(-500,-500);
   mohammed->setScale(sf::Vector2f(0.2,0.2));
 }
 
 void Mohammed::onUpdate(const int ms){
-  if (ms > 20){
+  if (ms > 5){
     if (dead){
       return;
     }
     if (step != (int)path.size() && released && !dead){
-      mohammed->setPosition(path[step]);
+      this->setPosition(path[step]);
       step++;
     }
     if (step == (int)path.size()){
@@ -25,6 +25,12 @@ void Mohammed::onUpdate(const int ms){
       dead = true;
     }
   }
+}
+
+void Mohammed::setPosition(sf::Vector2f& position){
+  auto sizeX = mohammed->getTexture()->getSize().x*mohammed->getScale().x;
+  auto sizeY = mohammed->getTexture()->getSize().y*mohammed->getScale().y;
+  mohammed->setPosition(position.x - sizeX/2, position.y - sizeY/2);
 }
 
 void Mohammed::onRender(sf::RenderWindow* window){

@@ -22,29 +22,15 @@ void TowerDefense::start(){
 
 void TowerDefense::run(){
   while (currentSt != -1 && window->isOpen()){
-    //int i = 1;
     sf::Event event;
-    //std::vector<sf::Vector2f> pathVec = {};
-    //pathVec.push_back(sf::Vector2f(3.2, 5.6));
-    //pathVec.push_back(sf::Vector2f(3.2, 5.4));
-    //std::cout << pathVec[1].x << std::endl;
     window->clear();
     while (window->pollEvent(event)){
       currentState->onEvent(event);
       if (event.type == sf::Event::Closed){
         window->close();
       }
-      if (event.type == sf::Event::MouseButtonPressed){
-        std::cout << "pathVec.push_back(" << "sf::Vector2f(windowSize.x*" << event.mouseButton.x
-                                     << ", windowSize.y*"
-                                     << event.mouseButton.y << "));"
-                                     << std::endl;
-
-      }
       if (event.type == sf::Event::KeyPressed){
         currentState->nextLevel();
-
-
       }
     }
     currentState->onRender();

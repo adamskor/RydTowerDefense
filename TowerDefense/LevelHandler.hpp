@@ -3,13 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include "DynamicObjects/Enemy.hpp"
 #include "DynamicObjects/Tower.hpp"
+#include "StaticObjects/BuyMenu.hpp"
+#include "StaticObjects/PlayingField.hpp"
+#include "MathUtil.hpp"
 #include <iostream>
 
 
 class LevelHandler{
 public:
-  LevelHandler(std::map<std::string, sf::Texture*> textures,
-               const sf::Vector2i& windowSize);
+  LevelHandler(const std::map<std::string, sf::Texture*>& textures,
+               const sf::Vector2i& windowSize, PlayingField*& playingfield);
   ~LevelHandler() = default;
   void initPath();
   void AtoB(const sf::Vector2f& from, const sf::Vector2f& to);
@@ -21,11 +24,13 @@ public:
   void nextLevel();
   void endLevel();
   void releaseEnemy();
+  MathUtil mathUtil = MathUtil();
 private:
   sf::Vector2i windowSize;
   std::vector<sf::Vector2f> path;
   std::vector<Enemy*> enemies = {};
-  std::vector<Tower*> towers = {};
+  BuyMenu* buymenu = nullptr;
+  PlayingField* playingfield;
   int healthPoints = 100;
   int level = 1;
   int nEnemies = 0;

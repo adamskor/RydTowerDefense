@@ -17,6 +17,9 @@ public:
   void shutDown() override;
   void onEvent(sf::Event& event) override{};
   void nextLevel() override;
+public:
+  PlayingField* playingField = nullptr;
+  LevelHandler* levelhandler = nullptr;
 private:
   sf::Vector2i windowSize;
   sf::Vector2i aspectRatio;

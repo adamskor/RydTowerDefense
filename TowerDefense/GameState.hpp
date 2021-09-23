@@ -23,10 +23,7 @@ public:
   int getNextState();
   void setNextState(int next);
   void loadTextures();
-public:
-  PlayingField* playingField = nullptr;
-  LevelHandler* levelhandler = nullptr;
-
+  
 protected:
   std::unique_ptr<sf::Texture> texture = {};
   int nextState = 1;
